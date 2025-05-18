@@ -177,8 +177,7 @@ export class UserController extends BaseController {
 
         const userId = req.params.id;
         const user = await this.userRepository.findOneBy({ id: userId });
-        console.log(user)
-        console.log(userId)
+        
 
         if (!user) {
             return res.status(404).json({ error: "User not found." });

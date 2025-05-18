@@ -29,7 +29,6 @@ describe("LoginRouter tests", () => {
       .expect(StatusCodes.OK);
 
     // Assert
-    console.log(response.body);
     expect(mockLoginController.login).toHaveBeenCalled();
     expect(response.body).toEqual({ message: "Logged in", user: loginPayload.email });
   });

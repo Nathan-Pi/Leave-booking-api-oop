@@ -47,7 +47,6 @@ public requestLeave = async (req: Request, res: Response): Promise<void> => {
 };
 public approveLeave = async (req: Request, res: Response): Promise<void> => {
     try {
-        console.log("role id", req.signedInUser.role.id)
         const dbUser = await UserHelper.getDbUserFromRequest(req);
 
         
@@ -64,7 +63,7 @@ public approveLeave = async (req: Request, res: Response): Promise<void> => {
                 where: { leaveId: id },
                 relations: ["user"]
                 
-            });console.log({ leaveRequest, dbUser });
+            });
             
             if (!leaveRequest) {
                 
@@ -82,7 +81,7 @@ public approveLeave = async (req: Request, res: Response): Promise<void> => {
             }
 
             
-                console.log("here", leaveRequest)
+                
         leaveRequest.status = "approved";
 
         const start = new Date(leaveRequest.startDate);
@@ -98,7 +97,7 @@ public approveLeave = async (req: Request, res: Response): Promise<void> => {
 
         const updatedLeaveRequest = await this.leaveRepository.save(leaveRequest);
 
-        console.log("diffdays", diffDays)
+        
 
         return res.status(200).json({
             message: `Leave request ${id} has been approved`,
@@ -131,7 +130,7 @@ public rejectLeave = async (req: Request, res: Response): Promise<void> => {
         }
       
         leaveRequest.status = "rejected";
-        console.log("here", leaveRequest)
+        
 
        
 
@@ -170,7 +169,7 @@ public getAllLeaveRequests = async (req: Request, res: Response): Promise<void> 
             data: leaveRequests,
         });
     } else if (req.signedInUser.role.id === 2) {
-        console.log("role id is 2")
+        
         const leaveRequests = await this.leaveRepository.find({
             relations: ["user"],
             where: {
@@ -189,7 +188,7 @@ public getAllLeaveRequests = async (req: Request, res: Response): Promise<void> 
             data: leaveRequests,
         });
     } else if (req.signedInUser.role.id === 3)  {
-                console.log("role id is 3")
+                
 
         const leaveRequests = await this.leaveRepository.find({
             relations: ["user"],
@@ -200,9 +199,8 @@ public getAllLeaveRequests = async (req: Request, res: Response): Promise<void> 
             },
         });
 
-        console.log("leave requests", leaveRequests)
-        console.log("user id", dbUser.id
-        )
+        
+        
         if (!leaveRequests) {
             return res.status(404).json({ error: "No leave requests found." });
         }
@@ -243,7 +241,7 @@ public cancelLeave = async (req: Request, res: Response): Promise<void> => {
         if(leaveRequest.user.id !== dbUser.id && req.signedInUser.role.id !== 1 && req.signedInUser.role.id !== leaveRequest.user.manager.id) { 
             // CLARIFY not the user who made the request or admin or the manager of the request owner
             return res.status(403).json({ error: "You are not authorized to cancel this leave request." });}
-        console.log("leave requestt after")
+        
 
         leaveRequest.status = "cancelled";
 
